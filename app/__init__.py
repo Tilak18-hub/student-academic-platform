@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 
 def create_app():
@@ -6,6 +6,10 @@ def create_app():
 
     from app.routes.api import api_bp
     app.register_blueprint(api_bp, url_prefix="/api")
+
+    @app.get("/")
+    def dashboard():
+        return render_template("index.html")
 
     @app.get("/health")
     def health():

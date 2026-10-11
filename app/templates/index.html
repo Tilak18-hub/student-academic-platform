@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Academic Platform</title>
+    <style>
+        :root {
+            --navy: #10213a;
+            --blue: #1769e8;
+            --text: #17243b;
+            --muted: #66748a;
+            --border: #e5eaf2;
+            --surface: #ffffff;
+            --background: #f5f7fb;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            color: var(--text);
+            background: var(--background);
+        }
+
+        .layout { display: flex; min-height: 100vh; }
+
+        .sidebar {
+            width: 245px;
+            flex-shrink: 0;
+            padding: 28px 16px;
+            color: white;
+            background: linear-gradient(180deg, #142943, #0b192c);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 8px 32px;
+            font-size: 16px;
+            font-weight: 750;
+        }
+
+        .brand-icon { font-size: 28px; }
+
+        .nav-label {
+            margin: 8px 10px 12px;
+            color: #9eafc6;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 5px 0;
+            padding: 13px 12px;
+            color: #d9e3f2;
+            text-decoration: none;
+            border-radius: 9px;
+            font-size: 14px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background: var(--blue);
+        }
+
+        .sidebar-note {
+            margin: 38px 5px 0;
+            padding: 15px;
+            border: 1px solid #35465c;
+            border-radius: 12px;
+            color: #cbd6e5;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .main { flex: 1; min-width: 0; }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 34px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .topbar-title { font-weight: 700; }
+        .topbar-right { display: flex; align-items: center; gap: 16px; }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .dot {
+            width: 9px;
+            height: 9px;
+            background: #e5a323;
+            border-radius: 50%;
+        }
+
+        .dot.online { background: #16a765; }
+        .dot.offline { background: #df4040; }
+
+        .button {
+            display: inline-block;
+            padding: 11px 15px;
+            border: 1px solid #b9d1ff;
+            border-radius: 9px;
+            background: white;
+            color: var(--blue);
+            font-weight: 650;
+            font-size: 13px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .button.primary {
+            color: white;
+            background: var(--blue);
+            border-color: var(--blue);
+        }
+
+        .content { max-width: 1500px; margin: auto; padding: 30px 34px; }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            padding: 38px;
+            border: 1px solid #e0eaff;
+            border-radius: 18px;
+            background: linear-gradient(115deg, #eaf2ff, #f8faff 75%);
+        }
+
+        .eyebrow {
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2.5px;
+        }
+
+        h1 {
+            max-width: 750px;
+            margin: 13px 0;
+            font-size: clamp(27px, 3vw, 42px);
+            line-height: 1.16;
+            letter-spacing: -1.2px;
+        }
+
+        h1 span { color: var(--blue); }
+
+        .hero p {
+            max-width: 680px;
+            color: #5d6b82;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+        .hero-art { position: absolute; right: 45px; top: 45px; font-size: 100px; opacity: .9; }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin: 30px 0 16px;
+        }
+
+        h2 { margin: 0; font-size: 20px; }
+        .muted { color: var(--muted); font-size: 13px; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .stat, .feature, .api-card {
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: var(--surface);
+            box-shadow: 0 3px 12px rgba(22, 42, 75, .025);
+        }
+
+        .stat { padding: 21px; }
+        .stat-label { color: var(--muted); font-size: 13px; }
+        .stat-value { margin: 12px 0 7px; font-size: 25px; font-weight: 800; }
+        .stat-foot { color: #168354; font-size: 12px; }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 20px;
+            transition: transform .15s, box-shadow .15s;
+        }
+
+        .feature:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(22, 42, 75, .07);
+        }
+
+        .feature-icon {
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            background: #eaf2ff;
+            color: var(--blue);
+            font-size: 22px;
+        }
+
+        .feature h3 { margin: 2px 0 8px; font-size: 15px; }
+        .feature p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+
+        .api-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .api-card { padding: 17px; }
+        .api-card p { color: var(--muted); font-size: 12px; line-height: 1.6; }
+        code {
+            display: inline-block;
+            padding: 5px 7px;
+            border-radius: 5px;
+            background: #f0f4fa;
+            color: #2454a4;
+            font-size: 11px;
+            overflow-wrap: anywhere;
+        }
+
+        .health-banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            margin-top: 26px;
+            padding: 19px 22px;
+            border: 1px solid #cceedd;
+            border-radius: 12px;
+            background: #edfaf3;
+        }
+
+        .health-title { color: #157747; font-weight: 750; }
+        .health-detail { margin-top: 5px; color: #557365; font-size: 12px; }
+
+        footer {
+            padding: 24px 0 8px;
+            color: #7b8798;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        @media (max-width: 1050px) {
+            .sidebar { width: 205px; }
+            .hero-art { right: 20px; font-size: 75px; }
+            .features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 760px) {
+            .layout { display: block; }
+            .sidebar { width: 100%; padding: 16px; }
+            .brand { padding-bottom: 14px; }
+            .nav-label, .sidebar-note { display: none; }
+            .nav-link { display: inline-flex; padding: 9px; margin: 3px; }
+            .topbar { padding: 16px; }
+            .content { padding: 18px 14px; }
+            .hero { padding: 25px; }
+            .hero-art { display: none; }
+            .stats, .features, .api-grid { grid-template-columns: 1fr; }
+            .health-banner { align-items: flex-start; flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar">
+        <div class="brand"><span class="brand-icon">🎓</span><span>Student Academic Platform</span></div>
+        <div class="nav-label">Workspace</div>
+        <a class="nav-link active" href="#dashboard">⌂ &nbsp; Dashboard</a>
+        <a class="nav-link" href="#features">♙ &nbsp; Students</a>
+        <a class="nav-link" href="#features">♟ &nbsp; Faculty</a>
+        <a class="nav-link" href="#features">▤ &nbsp; Courses</a>
+        <a class="nav-link" href="#features">▦ &nbsp; Enrollments</a>
+        <a class="nav-link" href="#features">▥ &nbsp; Grades</a>
+        <a class="nav-link" href="#api">▦ &nbsp; GPA Calculator</a>
+        <div class="sidebar-note">
+            <strong>Academic Management</strong><br>
+            A lightweight platform for student records, course enrollment, grading and GPA calculation.
+        </div>
+    </aside>
+
+    <main class="main" id="dashboard">
+        <header class="topbar">
+            <div class="topbar-title">Overview / Dashboard</div>
+            <div class="topbar-right">
+                <div class="status"><span class="dot" id="status-dot"></span><span id="status-text">Checking system…</span></div>
+                <a class="button" href="/health" target="_blank" rel="noopener">↗ Health API</a>
+            </div>
+        </header>
+
+        <div class="content">
+            <section class="hero">
+                <div class="eyebrow">WELCOME TO YOUR WORKSPACE</div>
+                <h1>Student Academic <span>Management Platform</span></h1>
+                <p>Manage student records, faculty, courses, semester enrollments, grades and academic performance through one service.</p>
+                <div class="hero-actions">
+                    <a class="button primary" href="#features">＋ Explore Features</a>
+                    <a class="button" href="#api">View API Endpoints →</a>
+                </div>
+                <div class="hero-art" aria-hidden="true">📚</div>
+            </section>
+
+            <div class="stats">
+                <article class="stat">
+                    <div class="stat-label">Core API Capabilities</div>
+                    <div class="stat-value">06</div>
+                    <div class="stat-foot">Student, faculty and academic operations</div>
+                </article>
+                <article class="stat">
+                    <div class="stat-label">Semester Credit Policy</div>
+                    <div class="stat-value">18 Credits</div>
+                    <div class="stat-foot">Enrollment limit enforced by business logic</div>
+                </article>
+                <article class="stat">
+                    <div class="stat-label">Application Version</div>
+                    <div class="stat-value">v1.0.0</div>
+                    <div class="stat-foot">Flask REST API with automated tests</div>
+                </article>
+            </div>
+
+            <section id="features">
+                <div class="section-heading">
+                    <h2>✦ Key Features</h2>
+                    <span class="muted">Academic operations</span>
+                </div>
+                <div class="features">
+                    <article class="feature">
+                        <div class="feature-icon">♙</div>
+                        <div><h3>Student Management</h3><p>Create student records and retrieve academic profiles by student ID.</p></div>
+                    </article>
+                    <article class="feature">
+                        <div class="feature-icon" style="background:#e5f8ee;color:#15985b">♟</div>
+                        <div><h3>Faculty Management</h3><p>Register faculty members with unique IDs and contact information.</p></div>
+                    </article>
+                    <article class="feature">
+                        <div class="feature-icon" style="background:#fff3dc;color:#c78312">▤</div>
+                        <div><h3>Course Management</h3><p>Create courses with credit values and faculty assignments.</p></div>
+                    </article>
+                    <article class="feature">
+                        <div class="feature-icon" style="background:#ffe8ed;color:#d23d62">▦</div>
+                        <div><h3>Semester Enrollment</h3><p>Enroll students while checking duplicate enrollment and the 18-credit limit.</p></div>
+                    </article>
+                    <article class="feature">
+                        <div class="feature-icon" style="background:#f0e8ff;color:#7744cc">▥</div>
+                        <div><h3>Grade Management</h3><p>Assign grades to student course enrollments for a specified semester.</p></div>
+                    </article>
+                    <article class="feature">
+                        <div class="feature-icon" style="background:#e0f7fb;color:#11889d">▦</div>
+                        <div><h3>GPA Calculation</h3><p>Calculate semester GPA from recorded grades and course credits.</p></div>
+                    </article>
+                </div>
+            </section>
+
+            <section id="api">
+                <div class="section-heading">
+                    <h2>API Quick Reference</h2>
+                    <span class="muted">Available routes</span>
+                </div>
+                <div class="api-grid">
+                    <article class="api-card">
+                        <code>GET /health</code>
+                        <p>Check whether the application is running.</p>
+                        <a class="button" href="/health" target="_blank" rel="noopener">Test Health →</a>
+                    </article>
+                    <article class="api-card">
+                        <code>GET /api/students/&lt;student_id&gt;</code>
+                        <p>Retrieve a student by ID.</p>
+                    </article>
+                    <article class="api-card">
+                        <code>POST /api/students</code>
+                        <p>Create a student using a JSON request body.</p>
+                    </article>
+                    <article class="api-card">
+                        <code>POST /api/faculty</code>
+                        <p>Register a faculty member.</p>
+                    </article>
+                    <article class="api-card">
+                        <code>POST /api/courses</code>
+                        <p>Create a course and assign its credits and faculty.</p>
+                    </article>
+                    <article class="api-card">
+                        <code>POST /api/enrollments</code>
+                        <p>Enroll a student in a course for a semester.</p>
+                    </article>
+                    <article class="api-card">
+                        <code>POST /api/grades</code>
+                        <p>Assign a grade for a student’s course enrollment.</p>
+                    </article>
+                    <article class="api-card">
+                        <code>GET /api/students/&lt;student_id&gt;/gpa?semester=...</code>
+                        <p>Calculate a student's GPA for a semester.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="health-banner">
+                <div>
+                    <div class="health-title" id="health-title">◉ Checking application health…</div>
+                    <div class="health-detail" id="health-detail">Contacting the health endpoint.</div>
+                </div>
+                <a class="button" href="/health" target="_blank" rel="noopener">Open Health Response ↗</a>
+            </section>
+
+            <footer>Student Academic Management Platform · Version 1.0.0 · Built with Flask</footer>
+        </div>
+    </main>
+</div>
+
+<script>
+    async function checkHealth() {
+        const dot = document.getElementById("status-dot");
+        const statusText = document.getElementById("status-text");
+        const title = document.getElementById("health-title");
+        const detail = document.getElementById("health-detail");
+
+        try {
+            const response = await fetch("/health", { cache: "no-store" });
+            const data = await response.json();
+
+            if (!response.ok || data.status !== "UP") {
+                throw new Error("Application health check failed");
+            }
+
+            dot.className = "dot online";
+            statusText.textContent = "System Online";
+            title.textContent = "✓ System Running Successfully";
+            detail.textContent = data.service + " · Version " + data.version;
+        } catch (error) {
+            dot.className = "dot offline";
+            statusText.textContent = "Status Unavailable";
+            title.textContent = "Application health check failed";
+            detail.textContent = "Refresh the page or open the health endpoint to investigate.";
+        }
+    }
+
+    checkHealth();
+</script>
+</body>
+</html>
